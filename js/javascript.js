@@ -12,7 +12,10 @@ $(function () {
             children = $table.find('tr[data-parent="' + id + '"]');
 
         if (children.length) {
-            var expander = $columnName.prepend('<span class="treegrid-expander glyphicon glyphicon-chevron-right"></span>');
+            var expander = $columnName.prepend('' +
+                '<span class="treegrid-expander glyphicon glyphicon-chevron-right"></span>' +
+                '');
+
             children.hide();
 
             expander.on('click', function (e) {
@@ -28,7 +31,7 @@ $(function () {
                         .removeClass('glyphicon-chevron-down')
                         .addClass('glyphicon-chevron-right');
 
-                    children.hide();
+                    reverseHide($table, $row);
                 }
             });
         }
@@ -38,4 +41,24 @@ $(function () {
             '');
     });
 
+    // Reverse hide all elements
+    reverseHide = function (table, element) {
+        var
+            $element = $(element),
+            id = $element.data('id'),
+            children = table.find('tr[data-parent="' + id + '"]');
+
+        if (children.length) {
+            children.each(function (i, e) {
+                reverseHide(table, e);
+            });
+
+            $element
+                .find('.glyphicon-chevron-down')
+                .removeClass('glyphicon-chevron-down')
+                .addClass('glyphicon-chevron-right');
+
+            children.hide();
+        }
+    };
 });
